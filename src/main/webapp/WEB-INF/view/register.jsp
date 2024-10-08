@@ -41,7 +41,7 @@
 			<div class="mb-3">
 				<label for="email" class="form-label">Email:</label> <input
 					path="email" type="email" class="form-control" id="email"
-					name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required />
+					name="email"  required />
 			</div>
 			<div class="mb-3">
 				<label for="password" class="form-label">Password:</label> <input
@@ -57,7 +57,7 @@
 			<div class="mb-3">
 				<label for="fullName" class="form-label">Full Name:</label> <input
 					path="fullname" type="text" class="form-control" id="fullname"
-					name="fullname" pattern="[A-Za-z0-9 !@#*]*" required />
+					name="fullname"  required />
 			</div>
 			<button type="submit" class="btn btn-primary w-100">Register</button>
 		</form>

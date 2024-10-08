@@ -37,17 +37,10 @@ public class LoginController {
 			// Logic for when the user is exists
 			User user = userDAO.retrieveUser(username);
 
-			Cookie foo = new Cookie("foo", "bar");
-
-			foo.setHttpOnly(true);
-			response.addCookie(foo);
-
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user.getEmail());
 
 			return "redirect:/";
-
-			// tony@deakin.edu.au' OR '1'='1--
 		} else {
 			// Logic for when the user doesn't exist
 			model.addAttribute("errorMessage", "Wrong combination of password and username");

@@ -21,8 +21,8 @@ public class User {
 	protected int id;
 	
 	@Column(name = "email")
-	@NotNull(message = "is required")
-	@Pattern(regexp ="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}", message="Please enter a valid email address (e.g., username@example.com)")
+//	@NotNull(message = "is required")
+//	@Pattern(regexp ="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}", message="Please enter a valid email address (e.g., username@example.com)")
 	protected String email;
 
 	@Column(name = "PasswordHash")
@@ -31,9 +31,9 @@ public class User {
 	transient protected String confirmPassword;
 
 	@Column(name = "FullName")
-	@NotNull(message = "is required")
-	@Size(min = 3, message="is required")
-	@Pattern(regexp ="[a-zA-Z]+", message="incorrect format")
+//	@NotNull(message = "is required")
+//	@Size(min = 3, message="is required")
+//	@Pattern(regexp ="[a-zA-Z]+", message="incorrect format")
 	protected String fullname;
 
 	@Column(name = "RoleID")

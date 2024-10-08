@@ -131,10 +131,11 @@ public class UserDAOImpl implements UserDAO {
 		Session session = getSession();
 		try {
 			session.beginTransaction();
-			String hql = "from User where email = :email and password = :password";
+//			String hql = "from User where email = :email and password = :password";
+			String hql = "from User where email = '" + email + "' and password = '" + password + "'";
 	        Query<User> query = session.createQuery(hql);
-			query.setParameter("email", email);
-			query.setParameter("password", password);
+//			query.setParameter("email", email);
+//			query.setParameter("password", password);
 			// Obtain the query results
 			List<User> users = query.getResultList();
 			return !users.isEmpty();
