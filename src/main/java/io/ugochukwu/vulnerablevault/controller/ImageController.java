@@ -58,7 +58,7 @@ public class ImageController {
 		// Define the path to the image in the /tmp/ directory
 		Path imagePath = Paths.get("/tmp/" + filename);
 
-		if (!role.getName().equalsIgnoreCase(Role.TELLER_ROLE) || !role.getName().equalsIgnoreCase(Role.ADMIN_ROLE)) {
+		if (!role.getName().equalsIgnoreCase(Role.TELLER_ROLE) && !role.getName().equalsIgnoreCase(Role.ADMIN_ROLE)) {
 			Transaction transaction = transactionDAO.getAccountReceiptTransaction(userAccount.getId(),
 					imagePath.toString());
 			if (transaction == null) {

@@ -93,7 +93,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 			session.close();
 		}
 	}
-	
+
 	@Override
 	public Transaction getAccountReceiptTransaction(int accountId, String receiptPath) {
 		Session session = getSession();
@@ -105,10 +105,8 @@ public class TransactionDAOImpl implements TransactionDAO {
 					+ "LEFT JOIN Account a2 ON t.destinationAccountId = a2.id "
 					+ "where t.sourceAccountId = :accountId AND t.transactionReceiptPath = :receiptPath";
 
-			List<Object[]> results = session.createQuery(hql, Object[].class)
-					.setParameter("accountId", accountId)
-					.setParameter("receiptPath", receiptPath)
-					.getResultList();
+			List<Object[]> results = session.createQuery(hql, Object[].class).setParameter("accountId", accountId)
+					.setParameter("receiptPath", receiptPath).getResultList();
 
 			Transaction transaction = null;
 			for (Object[] result : results) {
@@ -118,7 +116,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 				transaction.setSourceAccountNumber(sourceAccountNumber);
 				transaction.setDestinationAccountNumber(destinationAccountNumber);
 			}
-			
+
 			return transaction;
 		} finally {
 			session.close();
@@ -136,11 +134,4 @@ public class TransactionDAOImpl implements TransactionDAO {
 			session.close();
 		}
 	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		// Close session factory before destroying the object
-//		sessionFactory.close();
-	}
-
 }

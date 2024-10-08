@@ -4,23 +4,21 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import io.ugochukwu.vulnerablevault.entity.Role;
-import io.ugochukwu.vulnerablevault.entity.User;
 
 @Repository("roleDao")
 public class RoleDAOImpl implements RoleDAO {
 
 	@Autowired
-    private SessionFactory sessionFactory;
-	
-	protected Session getSession(){
-        return sessionFactory.getCurrentSession();
-    }
+	private SessionFactory sessionFactory;
+
+	protected Session getSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	@Override
 	public Role retrieveCustomerRole() {
@@ -87,7 +85,7 @@ public class RoleDAOImpl implements RoleDAO {
 			session.close();
 		}
 	}
-	
+
 	@Override
 	public Role retrieveRoleById(int id) {
 		Session session = getSession();
@@ -97,11 +95,5 @@ public class RoleDAOImpl implements RoleDAO {
 		} finally {
 			session.close();
 		}
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		// Close session factory before destroying the object
-//		sessionFactory.close();
 	}
 }

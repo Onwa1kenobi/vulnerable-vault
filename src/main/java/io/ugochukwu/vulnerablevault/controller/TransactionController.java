@@ -7,21 +7,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.tika.Tika;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import io.ugochukwu.vulnerablevault.config.CSRFTokenService;
 import io.ugochukwu.vulnerablevault.dao.AccountDAOImpl;
@@ -44,14 +39,7 @@ public class TransactionController {
 	private TransactionDAOImpl transactionDAO;
 
 	@Autowired
-	private SessionFactory sessionFactory;
-	
-	@Autowired
-    private CSRFTokenService csrfTokenService;
-
-	protected Session getSession() {
-		return sessionFactory.getCurrentSession();
-	}
+	private CSRFTokenService csrfTokenService;
 
 	@PostMapping(value = "/performTransaction", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String performTransaction(@RequestParam("transactionType") String transactionType,
@@ -65,14 +53,14 @@ public class TransactionController {
 
 		try {
 			HttpSession requestSession = request.getSession();
-			
+
 			if (!csrfTokenService.validateCsrfToken(requestSession, csrfToken)) {
 				HttpSession session = request.getSession(false);
 				if (session != null) {
 					session.invalidate();
 				}
 				throw new Exception("Invalid Token!");
-	        }
+			}
 
 			if (requestSession.getAttribute("user") != null) {
 				User user = userDAO.retrieveUser(requestSession.getAttribute("user").toString());
@@ -83,6 +71,10 @@ public class TransactionController {
 					double newBalance;
 					switch (transactionType) {
 					case "deposit":
+						if (receipt == null) {
+							errorMessage = "Please attach a receipt";
+							break;
+						}
 						Tika tika = new Tika();
 						String fileType = tika.detect(receipt.getInputStream());
 						System.out.println("File type is: " + fileType);
@@ -90,17 +82,16 @@ public class TransactionController {
 							errorMessage = "Invalid file type";
 						} else {
 							byte[] bytes = receipt.getBytes();
-							Path path = Paths.get("/tmp/" + receipt.getOriginalFilename());
+							Path path = Paths.get(
+									"/tmp/" + LocalDateTime.now().toString() + "_" + receipt.getOriginalFilename());
 							Files.write(path, bytes);
 
 							final Transaction transaction = createTransaction(userAccount.getId(), null,
 									Transaction.TRANSACTION_TYPE_DEPOSIT, amount, path.toString());
 							transactionDAO.insertTransaction(transaction);
-
 							newBalance = userAccount.getBalance() + amount;
 							userAccount.setBalance(newBalance);
 							accountDAO.updateAccount(userAccount);
-
 							successMessage = "Deposit successful!";
 						}
 						break;
@@ -146,6 +137,9 @@ public class TransactionController {
 						errorMessage = "Invalid transaction type!";
 						break;
 					}
+
+					List<Transaction> transactions = transactionDAO.getAccountTransactions(userAccount.getId());
+					model.addAttribute("transactions", transactions);
 				}
 			}
 		} catch (Exception e) {
@@ -157,7 +151,7 @@ public class TransactionController {
 		model.addAttribute("errorMessage", errorMessage);
 
 		// Redirect back to the customer dashboard page
-		return "redirect:/customer-dashboard";
+		return "customer-dashboard";
 	}
 
 	@PostMapping("/deleteTransaction")

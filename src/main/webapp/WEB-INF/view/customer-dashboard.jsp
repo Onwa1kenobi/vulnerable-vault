@@ -73,7 +73,7 @@
 					</div>
 					<div class="card-body">
 						<form action="${pageContext.request.contextPath}/performTransaction" method="POST" enctype="multipart/form-data">
-						<input type="hidden" name="csrfToken" value="${csrfToken}" />
+							<input type="hidden" name="csrfToken" value="${csrfToken}" />
 							<div class="mb-3">
 								<label for="transactionType" class="form-label">Transaction Type</label>
 								<select id="transactionType" name="transactionType" class="form-select" required>

@@ -59,7 +59,7 @@ public class VulnerableVaultSpringSecurityConfig extends WebSecurityConfigurerAd
             	.exceptionHandling()
                 .accessDeniedPage("/access-denied")
             .and()
-            .csrf().disable(); // Disable CSRF for simplicity, enable it in production
+            .csrf().disable(); // Disable CSRF for own implementation
     }
 
 	@Override

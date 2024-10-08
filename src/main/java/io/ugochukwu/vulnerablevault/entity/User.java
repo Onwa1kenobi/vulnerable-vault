@@ -19,21 +19,21 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "UserID")
 	protected int id;
-	
+
 	@Column(name = "email")
-//	@NotNull(message = "is required")
-//	@Pattern(regexp ="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}", message="Please enter a valid email address (e.g., username@example.com)")
+	@NotNull(message = "is required")
+	@Pattern(regexp = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}", message = "Please enter a valid email address (e.g., username@example.com)")
 	protected String email;
 
 	@Column(name = "PasswordHash")
 	protected String password;
-	
+
 	transient protected String confirmPassword;
 
 	@Column(name = "FullName")
-//	@NotNull(message = "is required")
-//	@Size(min = 3, message="is required")
-//	@Pattern(regexp ="[a-zA-Z]+", message="incorrect format")
+	@NotNull(message = "is required")
+	@Size(min = 3, message = "is required")
+	@Pattern(regexp = "[a-zA-Z]+", message = "incorrect format")
 	protected String fullname;
 
 	@Column(name = "RoleID")
@@ -92,6 +92,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "user = [id: " + getId() + ", email: " + getEmail() + ", name: " + getFullname() + ", pass: " + getPassword() + ", pass2: " + getConfirmPassword() + ", role: " + getRoleID() + "]";
+		return "user = [id: " + getId() + ", email: " + getEmail() + ", name: " + getFullname() + ", pass: "
+				+ getPassword() + ", pass2: " + getConfirmPassword() + ", role: " + getRoleID() + "]";
 	}
 }

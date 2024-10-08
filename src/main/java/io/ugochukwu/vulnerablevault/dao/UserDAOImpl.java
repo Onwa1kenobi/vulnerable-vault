@@ -4,29 +4,25 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
-import io.ugochukwu.vulnerablevault.entity.Role;
 import io.ugochukwu.vulnerablevault.entity.User;
 
 @Repository("userDao")
 public class UserDAOImpl implements UserDAO {
-	
-	@Autowired
-    private PasswordEncoder passwordEncoder;
 
 	@Autowired
-    private SessionFactory sessionFactory;
-	
-	protected Session getSession(){
-        return sessionFactory.getCurrentSession();
-    }
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	protected Session getSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	public void updateUser(User user) {
 		Session session = getSession();
@@ -44,16 +40,16 @@ public class UserDAOImpl implements UserDAO {
 		int id;
 		try {
 			session.beginTransaction();
-	        user.setPassword(passwordEncoder.encode(user.getPassword()));
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			session.save(user);
-			
+
 			id = ((Integer) session.getIdentifier(user)).intValue();
-			
+
 			session.getTransaction().commit();
 		} finally {
 			session.close();
 		}
-		
+
 		return id;
 	}
 
@@ -131,11 +127,10 @@ public class UserDAOImpl implements UserDAO {
 		Session session = getSession();
 		try {
 			session.beginTransaction();
-//			String hql = "from User where email = :email and password = :password";
-			String hql = "from User where email = '" + email + "' and password = '" + password + "'";
-	        Query<User> query = session.createQuery(hql);
-//			query.setParameter("email", email);
-//			query.setParameter("password", password);
+			String hql = "from User where email = :email and password = :password";
+			Query<User> query = session.createQuery(hql);
+			query.setParameter("email", email);
+			query.setParameter("password", password);
 			// Obtain the query results
 			List<User> users = query.getResultList();
 			return !users.isEmpty();
@@ -143,11 +138,4 @@ public class UserDAOImpl implements UserDAO {
 			session.close();
 		}
 	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		// Close session factory before destroying the object
-//		sessionFactory.close();
-	}
-
 }

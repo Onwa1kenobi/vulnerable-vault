@@ -46,15 +46,13 @@ public class RegisterController {
 		return "register";
 	}
 
-	@RequestMapping("/registerTheUser")
+//	@RequestMapping("/registerTheUser")
 	public String authenticateTheUser(@ModelAttribute("user") User user, BindingResult validationErrors, Model model,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		System.out.println(user.toString());
-
 //		Input validation
 		if (validationErrors.hasErrors()) {
-			return "client-form";
+			return "register";
 		}
 
 		if (!user.getPassword().equals(user.getConfirmPassword())) {
@@ -63,7 +61,6 @@ public class RegisterController {
 		}
 
 		try {
-//			Role customerRole = roleDAO.retrieveTellerRole();
 			Role customerRole = roleDAO.retrieveCustomerRole();
 			user.setRoleID(customerRole.getId());
 
@@ -73,17 +70,10 @@ public class RegisterController {
 
 			User registeredUser = userDAO.retrieveUser(user.getEmail());
 			if (registeredUser != null) {
-				Cookie foo = new Cookie("foo", "bar");
-
-				foo.setHttpOnly(true);
-				response.addCookie(foo);
-
 				HttpSession session = request.getSession();
 				session.setAttribute("user", registeredUser.getEmail());
 
-				return "redirect:/customer-dashboard";
-
-				// return "redirect:/workout?user="+user.getId();
+				return "redirect:/";
 			} else {
 				model.addAttribute("errorMessage", "An error occurred while registering the user");
 				return "register";
